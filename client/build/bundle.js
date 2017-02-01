@@ -1,0 +1,150 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UI = __webpack_require__(1);
+	
+	var app = function() {
+	    new UI();
+	}
+	
+	window.onload = app;
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Lists = __webpack_require__(2);
+	
+	var UI = function() {
+	    var lists = Lists();
+	
+	    this.render(lists);
+	}
+	
+	UI.prototype = {
+	    createText: function(text, label) {
+	        var p = document.createElement('p');
+	        p.innerText = label + text;
+	        return p;
+	    },
+	
+	    appendText: function(element, text, label) {
+	        var pTag = this.createText(text, label);
+	        element.appendChild(pTag);
+	    },
+	
+	    createItem: function(li, item) {
+	        this.appendText(li, item, 'Country: ');
+	    },
+	
+	    render: function(lists) {
+	        var container = document.getElementById('lists');
+	        container.innerHTML = "";
+	
+	        for (var list of lists) {
+	          var li = document.createElement('li');
+	          this.appendText(li, list.name, 'list: ');
+	          
+	          for (var item of list.items){
+	            this.createItem(li, item);
+	          }
+	
+	          container.appendChild(li);
+	        }
+	
+	        container.appendChild(this.createForm())  
+	    }
+	}
+	
+	module.exports = UI;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var List = __webpack_require__(3);
+	
+	var Lists = function() {
+	
+	    var list1 = new List({
+	        name: "1st Countries Bucket List",
+	        items: ["Germany", "Switzerland", "New Zealand", "India"]
+	    });
+	
+	    var list2 = new List({
+	        name: "2nd Countries Bucket List",
+	        items: ["America","Brazil","South Africa"]
+	    });
+	
+	    return [list1, list2];
+	}
+	
+	module.exports = Lists;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	var List = function(options) {
+	    this.name = options.name;
+	    this.items = options.items || [];
+	}
+	
+	List.prototype = {
+	    addItem: function(item) {
+	        this.items.push(item);
+	    },
+	
+	    size: function() {
+	        return this.items.length
+	    }
+	}
+	
+	module.exports = List;
+
+/***/ }
+/******/ ]);
+//# sourceMappingURL=bundle.js.map
