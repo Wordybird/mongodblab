@@ -3,27 +3,21 @@ var listRouter = express.Router();
 var app = express();
 var List = require('../client/src/models/list');
 
-var list1 = new List({
-    name: "1st Countries Bucket List",
-    items: ["Germany", "Switzerland", "New Zealand", "India"]
-});
-
-var list2 = new List({
-    name: "2nd Countries Bucket List",
-    items: ["America","Brazil","South Africa"]
-});
-
-var lists = [list1, list2];
+var ListQuery = require('../db/listQuery');
+var query = new ListQuery();
 
 
 listRouter.get('/', function (req, res) {
-  res.json(lists);
+    query.all(function(results) {
+        res.json(results);
+    });
 });
 
 listRouter.put('/', function(req, res) {
-    lists.push(new List(req.body));
-    console.log(lists);
-    res.json(lists);
+    var list = new List(req.body);
+    query.update(list, function(results) {
+        res.json(results);
+    })
 })
 
 module.exports = listRouter;

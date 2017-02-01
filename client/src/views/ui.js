@@ -29,7 +29,6 @@ UI.prototype = {
     },
 
     renderLists: function(lists) {
-        console.log(lists);
         var container = document.getElementById('lists');
         container.innerHTML = "";
 
