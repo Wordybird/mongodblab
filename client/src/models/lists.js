@@ -26,8 +26,6 @@ Lists.prototype = {
             return listName === list.name
         })[0]
 
-        console.log(list)
-
         callback(list);
     }
 }

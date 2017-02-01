@@ -1,14 +1,23 @@
 var express = require('express');
 var listRouter = express.Router();
 var app = express();
+var List = require('../client/src/models/list');
+
+var list1 = new List({
+    name: "1st Countries Bucket List",
+    items: ["Germany", "Switzerland", "New Zealand", "India"]
+});
+
+var list2 = new List({
+    name: "2nd Countries Bucket List",
+    items: ["America","Brazil","South Africa"]
+});
+
+var lists = [list1, list2];
 
 
 listRouter.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + '/../client/build/index.html'));
+  res.json(lists);
 });
-
-listRouter.get('/about', function(req, res){
-  res.json({data: "All about us!"});
-})
 
 module.exports = listRouter;
