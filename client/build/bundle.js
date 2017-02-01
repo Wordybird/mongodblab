@@ -187,11 +187,11 @@
 	
 	Lists.prototype = {
 	
-	    makeRequest: function (url, callback) {
+	    makeRequest: function (url, protocol, callback, payload) {
 	      var request = new XMLHttpRequest();
-	      request.open('GET', url);
+	      request.open(protocol, url);
 	      request.onload = callback;
-	      request.send();
+	      request.send(payload);
 	    },
 	
 	    populateLists: function(results) {
@@ -206,7 +206,7 @@
 	    all: function(callback) {
 	        var self = this;
 	
-	        this.makeRequest('http://localhost:3000/api/lists', function() {
+	        this.makeRequest('http://localhost:3000/api/lists', 'GET', function() {
 	            if (this.status !== 200) {
 	                return;
 	            }
@@ -216,6 +216,12 @@
 	            var lists = self.populateLists(results);
 	            callback(lists);
 	        });
+	    },
+	
+	    update: function(list, callback) {
+	        var listJSON = JSON.stringify(list);
+	
+	        this.makeRequest("http://localhost:3000/api/lists", 'PUT', callback, listJSON);
 	    },
 	
 	    find: function(listName, callback) {

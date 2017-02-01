@@ -20,4 +20,9 @@ listRouter.get('/', function (req, res) {
   res.json(lists);
 });
 
+listRouter.put('/', function(req, res) {
+    lists.push(new List(req.body));
+    console.log(lists);
+})
+
 module.exports = listRouter;
