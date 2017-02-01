@@ -21,13 +21,14 @@ Lists.prototype = {
         callback(this.lists);
     },
 
-    add: function(country, listName, callback) {
+    find: function(listName, callback) {
         var list = this.lists.filter(function(list) {
             return listName === list.name
         })[0]
 
-        list.push(country);
-        callback(this.lists);
+        console.log(list)
+
+        callback(list);
     }
 }
 

@@ -45,8 +45,9 @@ UI.prototype = {
 
     },
 
-    addSelect: function(collection) {
+    addListSelect: function(collection) {
         var select = document.createElement('select');
+        select.name = "list"
 
         for (var item of collection) {
           var option = document.createElement('option');
@@ -59,13 +60,24 @@ UI.prototype = {
         this.form.appendChild(select);
     },
 
+    addCountrySelect: function(collection) {
+        var select = document.createElement('select');
+        select.name = "country"
+
+        for (var item of collection) {
+          var option = document.createElement('option');
+          option.value = item.name;
+          option.text = item.name;
+    
+          select.appendChild(option);
+        }
+
+        this.form.appendChild(select);
+    },
+
     renderForm: function(countries) {
         this.form = document.getElementById('ourForm');
         this.form.innerHTML = "";
-
-
-        this.lists.all((this.addSelect).bind(this));
-        this.countries.all((this.addSelect).bind(this));
 
         var button = document.createElement('button');
         button.type = 'submit';
@@ -73,11 +85,22 @@ UI.prototype = {
 
         this.form.appendChild(button);
 
+        this.countries.all(this.addCountrySelect.bind(this));
+        this.lists.all(this.addListSelect.bind(this));
+    
+
         this.form.onsubmit = function(event) {
             event.preventDefault();
 
+            //We need to add a country to a list. Add will find the correct list from the option value.
 
-        }
+            var listName = event.target.list.value;
+            var country = event.target.country.value;
+
+            this.lists.find(event.target.list.value, function(list) {
+                list.addItem(country);
+            })
+        }.bind(this);
     }
 }
 
