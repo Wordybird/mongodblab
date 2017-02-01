@@ -57,11 +57,17 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Lists = __webpack_require__(2);
+	var Countries = __webpack_require__(4);
 	
 	var UI = function() {
 	    var lists = Lists();
+	    var countries = new Countries();
 	
-	    this.render(lists);
+	    this.renderLists(lists);
+	
+	    countries.all(function(result) {
+	        this.renderCountries(result);
+	    }.bind(this));
 	}
 	
 	UI.prototype = {
@@ -80,7 +86,7 @@
 	        this.appendText(li, item, 'Country: ');
 	    },
 	
-	    render: function(lists) {
+	    renderLists: function(lists) {
 	        var container = document.getElementById('lists');
 	        container.innerHTML = "";
 	
@@ -95,7 +101,18 @@
 	          container.appendChild(li);
 	        }
 	
-	        container.appendChild(this.createForm())  
+	    },
+	
+	    renderCountries: function(countries) {
+	        var container = document.getElementById('countries');
+	        container.innerHTML = "";
+	
+	        for (var country of countries) {
+	          var li = document.createElement('li');
+	          this.appendText(li, country, 'Country: ');
+	
+	          container.appendChild(li);
+	        }
 	    }
 	}
 	
@@ -144,6 +161,52 @@
 	}
 	
 	module.exports = List;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	var Countries = function() {
+	
+	};
+	
+	Countries.prototype = {
+	
+	    makeRequest: function (url, callback) {
+	      var request = new XMLHttpRequest();
+	      request.open('GET', url);
+	      request.onload = callback;
+	      request.send();
+	    },
+	
+	    all: function(callback) {
+	
+	        var self = this;
+	
+	        this.makeRequest('https://restcountries.eu/rest/v1/all', function() {
+	            if (this.status !== 200) {
+	                return;
+	            }
+	            var jsonString = this.responseText;
+	            var results = JSON.parse(jsonString);
+	
+	            var countries = self.populateCountries(results);
+	            callback(countries);
+	        });
+	    },
+	
+	    populateCountries: function(results) {
+	        var countries = [];
+	        for (var result of results) {
+	            var country = result.name;
+	            countries.push(country);
+	        }
+	        return countries;
+	    }   
+	
+	}
+	
+	module.exports = Countries;
 
 /***/ }
 /******/ ]);

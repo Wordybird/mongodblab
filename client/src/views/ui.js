@@ -1,9 +1,15 @@
 var Lists = require('../models/lists');
+var Countries = require('../models/countries');
 
 var UI = function() {
     var lists = Lists();
+    var countries = new Countries();
 
-    this.render(lists);
+    this.renderLists(lists);
+
+    countries.all(function(result) {
+        this.renderCountries(result);
+    }.bind(this));
 }
 
 UI.prototype = {
@@ -22,7 +28,7 @@ UI.prototype = {
         this.appendText(li, item, 'Country: ');
     },
 
-    render: function(lists) {
+    renderLists: function(lists) {
         var container = document.getElementById('lists');
         container.innerHTML = "";
 
@@ -37,7 +43,18 @@ UI.prototype = {
           container.appendChild(li);
         }
 
-        container.appendChild(this.createForm())  
+    },
+
+    renderCountries: function(countries) {
+        var container = document.getElementById('countries');
+        container.innerHTML = "";
+
+        for (var country of countries) {
+          var li = document.createElement('li');
+          this.appendText(li, country, 'Country: ');
+
+          container.appendChild(li);
+        }
     }
 }
 
