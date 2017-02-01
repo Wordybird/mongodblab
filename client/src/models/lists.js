@@ -12,7 +12,23 @@ var Lists = function() {
         items: ["America","Brazil","South Africa"]
     });
 
-    return [list1, list2];
+    this.lists = [list1, list2];
+}
+
+Lists.prototype = {
+
+    all: function(callback) {
+        callback(this.lists);
+    },
+
+    add: function(country, listName, callback) {
+        var list = this.lists.filter(function(list) {
+            return listName === list.name
+        })[0]
+
+        list.push(country);
+        callback(this.lists);
+    }
 }
 
 module.exports = Lists;

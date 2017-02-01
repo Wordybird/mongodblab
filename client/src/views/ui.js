@@ -2,13 +2,13 @@ var Lists = require('../models/lists');
 var Countries = require('../models/countries');
 
 var UI = function() {
-    this.lists = Lists();
-    var countries = new Countries();
+    this.lists = new Lists;
+    this.countries = new Countries();
 
-    this.renderLists(this.lists);
+    this.lists.all(this.renderLists.bind(this));
 
-    countries.all(function(result) {
-        this.renderForm(result);
+    this.countries.all(function(result) {
+         this.renderForm(result);
     }.bind(this));
 }
 
@@ -45,7 +45,7 @@ UI.prototype = {
 
     },
 
-    createSelect: function(collection) {
+    addSelect: function(collection) {
         var select = document.createElement('select');
 
         for (var item of collection) {
@@ -56,26 +56,28 @@ UI.prototype = {
           select.appendChild(option);
         }
 
-        return select;
+        this.form.appendChild(select);
     },
 
     renderForm: function(countries) {
-        var form = document.getElementById('ourForm');
-        form.innerHTML = "";
+        this.form = document.getElementById('ourForm');
+        this.form.innerHTML = "";
 
-        var lists = this.createSelect(this.lists);
-        var countries = this.createSelect(countries);
 
-        form.appendChild(lists);
-        form.appendChild(countries);
+        this.lists.all((this.addSelect).bind(this));
+        this.countries.all((this.addSelect).bind(this));
 
         var button = document.createElement('button');
         button.type = 'submit';
         button.innerText = 'Add To List';
 
-        form.appendChild(button);
+        this.form.appendChild(button);
 
-        
+        this.form.onsubmit = function(event) {
+            event.preventDefault();
+
+
+        }
     }
 }
 
