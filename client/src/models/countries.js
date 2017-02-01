@@ -30,7 +30,7 @@ Countries.prototype = {
     populateCountries: function(results) {
         var countries = [];
         for (var result of results) {
-            var country = result.name;
+            var country = {name: result.name};
             countries.push(country);
         }
         return countries;

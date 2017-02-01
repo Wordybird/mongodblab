@@ -60,13 +60,13 @@
 	var Countries = __webpack_require__(4);
 	
 	var UI = function() {
-	    var lists = Lists();
+	    this.lists = Lists();
 	    var countries = new Countries();
 	
-	    this.renderLists(lists);
+	    this.renderLists(this.lists);
 	
 	    countries.all(function(result) {
-	        this.renderCountries(result);
+	        this.renderForm(result);
 	    }.bind(this));
 	}
 	
@@ -103,16 +103,37 @@
 	
 	    },
 	
-	    renderCountries: function(countries) {
-	        var container = document.getElementById('countries');
-	        container.innerHTML = "";
+	    createSelect: function(collection) {
+	        var select = document.createElement('select');
 	
-	        for (var country of countries) {
-	          var li = document.createElement('li');
-	          this.appendText(li, country, 'Country: ');
-	
-	          container.appendChild(li);
+	        for (var item of collection) {
+	          var option = document.createElement('option');
+	          option.value = item.name;
+	          option.text = item.name;
+	 
+	          select.appendChild(option);
 	        }
+	
+	        return select;
+	    },
+	
+	    renderForm: function(countries) {
+	        var form = document.getElementById('ourForm');
+	        form.innerHTML = "";
+	
+	        var lists = this.createSelect(this.lists);
+	        var countries = this.createSelect(countries);
+	
+	        form.appendChild(lists);
+	        form.appendChild(countries);
+	
+	        var button = document.createElement('button');
+	        button.type = 'submit';
+	        button.innerText = 'Add To List';
+	
+	        form.appendChild(button);
+	
+	        
 	    }
 	}
 	
@@ -198,7 +219,7 @@
 	    populateCountries: function(results) {
 	        var countries = [];
 	        for (var result of results) {
-	            var country = result.name;
+	            var country = {name: result.name};
 	            countries.push(country);
 	        }
 	        return countries;
