@@ -29,6 +29,7 @@ UI.prototype = {
     },
 
     renderLists: function(lists) {
+        console.log(lists);
         var container = document.getElementById('lists');
         container.innerHTML = "";
 
@@ -99,7 +100,8 @@ UI.prototype = {
 
             this.lists.find(event.target.list.value, function(list) {
                 list.addItem(country);
-            })
+                this.lists.update(list, this.renderLists.bind(this));
+            }.bind(this));
         }.bind(this);
     }
 }

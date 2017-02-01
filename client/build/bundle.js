@@ -87,6 +87,7 @@
 	    },
 	
 	    renderLists: function(lists) {
+	        console.log(lists);
 	        var container = document.getElementById('lists');
 	        container.innerHTML = "";
 	
@@ -157,7 +158,8 @@
 	
 	            this.lists.find(event.target.list.value, function(list) {
 	                list.addItem(country);
-	            })
+	                this.lists.update(list, this.renderLists.bind(this));
+	            }.bind(this));
 	        }.bind(this);
 	    }
 	}
@@ -190,6 +192,7 @@
 	    makeRequest: function (url, protocol, callback, payload) {
 	      var request = new XMLHttpRequest();
 	      request.open(protocol, url);
+	      request.setRequestHeader('Content-type', 'application/json')
 	      request.onload = callback;
 	      request.send(payload);
 	    },
@@ -220,8 +223,18 @@
 	
 	    update: function(list, callback) {
 	        var listJSON = JSON.stringify(list);
+	        var self = this;
+	        
+	        this.makeRequest("http://localhost:3000/api/lists", 'PUT', function() {
+	            if (this.status !== 200) {
+	                return;
+	            }
+	            var jsonString = this.responseText;
+	            var results = JSON.parse(jsonString);
 	
-	        this.makeRequest("http://localhost:3000/api/lists", 'PUT', callback, listJSON);
+	            var lists = self.populateLists(results);
+	            callback(lists);
+	        } , listJSON);
 	    },
 	
 	    find: function(listName, callback) {

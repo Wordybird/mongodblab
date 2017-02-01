@@ -23,6 +23,7 @@ listRouter.get('/', function (req, res) {
 listRouter.put('/', function(req, res) {
     lists.push(new List(req.body));
     console.log(lists);
+    res.json(lists);
 })
 
 module.exports = listRouter;
